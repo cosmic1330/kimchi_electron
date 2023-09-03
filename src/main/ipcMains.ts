@@ -1,11 +1,12 @@
 import { app, ipcMain } from 'electron';
+import { Example } from './channels';
 
-ipcMain.on('ipc-example', async (event, arg) => {
+ipcMain.on(Example.IpcExample, async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
+  event.reply(Example.IpcExample, msgTemplate('pong'));
 });
 
-ipcMain.on('app-version', (event) => {
+ipcMain.on(Example.AppVersion, (event) => {
   event.returnValue = app.getVersion();
 });

@@ -1,8 +1,10 @@
 import { Route, MemoryRouter as Router, Routes } from 'react-router-dom';
 import icon from '../../assets/icon.svg';
 import './App.css';
+import useUpdater from './hooks/useUpdater';
 
 function Hello() {
+  useUpdater();
   return (
     <div>
       <div className="Hello">

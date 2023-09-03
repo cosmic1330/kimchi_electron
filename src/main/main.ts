@@ -8,24 +8,80 @@
  * When running `npm run build` or `npm run build:main`, this file is compiled to
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
-import { BrowserWindow, app, shell } from 'electron';
+import { BrowserWindow, app, ipcMain, shell } from 'electron';
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
 import './ipcMains';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-
-class AppUpdater {
-  constructor() {
-    log.transports.file.level = 'info';
-    autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
-  }
-}
+import { Updater } from './channels';
 
 let mainWindow: BrowserWindow | null = null;
 
+// updater
+const sendStatusToWindow = (status?: any, params?: any) => {
+  mainWindow?.webContents.send(status, params);
+};
+
+class AppUpdater {
+  constructor(send: (status?: any, params?: any) => void) {
+    log.transports.file.level = 'info';
+    autoUpdater.logger = log;
+    autoUpdater.autoDownload = false; // 是否自动更新
+    autoUpdater.autoInstallOnAppQuit = true; // APP退出的时候自动安装
+
+    // 检测是否有更新
+    setTimeout(() => {
+      autoUpdater.checkForUpdates();
+    }, 5000);
+
+    autoUpdater.on('checking-for-update', () => {
+      send(Updater.CheckingForUpdate);
+    });
+
+    // 可以更新版本
+    autoUpdater.on('update-available', (info: any) => {
+      send(Updater.ConsoleLog, { title: '可以更新版本', info });
+      send(Updater.AutoUpdaterCanUpdate, info);
+    });
+    // 发起更新程序
+    ipcMain.on(Updater.AutoUpdaterToDownload, () => {
+      send(Updater.ConsoleLog, '发起更新开始');
+      autoUpdater
+        .downloadUpdate()
+        .then((r) => send(Updater.ConsoleLog, { title: '发起更新成功', r }))
+        .catch((err) =>
+          send(Updater.ConsoleLog, { title: '发起更新失败', err })
+        );
+    });
+    // 更新错误
+    autoUpdater.on('error', (err: any) => {
+      send(Updater.ConsoleLog, { title: '更新错误', err });
+      send(Updater.AutoUpdaterError, err);
+    });
+    // 正在下载的下载进度
+    autoUpdater.on('download-progress', (progressObj: any) => {
+      send(Updater.ConsoleLog, { title: '正在下载的下载进度', progressObj });
+      send(Updater.AutoUpdaterProgress, progressObj);
+    });
+    // 下载完成
+    autoUpdater.on('update-downloaded', (r) => {
+      send(Updater.ConsoleLog, { title: '下载完成', r });
+      send(Updater.AutoUpdaterDownloaded);
+    });
+    // 退出程序并安装
+    ipcMain.on(Updater.ExitApp, () => {
+      autoUpdater.quitAndInstall();
+    });
+    // 重新检查是否有新版本更新
+    ipcMain.on(Updater.MonitorUpdateSystem, () => {
+      autoUpdater.checkForUpdates();
+    });
+  }
+}
+
+// debug
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
@@ -51,6 +107,7 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
+// mainWindow
 const createWindow = async () => {
   if (isDebug) {
     await installExtensions();
@@ -104,7 +161,7 @@ const createWindow = async () => {
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  new AppUpdater();
+  new AppUpdater(sendStatusToWindow);
 };
 
 /**

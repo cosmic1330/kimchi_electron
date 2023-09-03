@@ -119,7 +119,7 @@ export default class MenuBuilder {
         },
         {
           label: 'Toggle Developer Tools',
-          accelerator: 'Alt+Command+I',
+          accelerator: 'F12',
           click: () => {
             this.mainWindow.webContents.toggleDevTools();
           },
@@ -134,6 +134,13 @@ export default class MenuBuilder {
           accelerator: 'Ctrl+Command+F',
           click: () => {
             this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
+          },
+        },
+        {
+          label: 'Toggle Developer Tools',
+          accelerator: 'F12',
+          click: () => {
+            this.mainWindow.webContents.toggleDevTools();
           },
         },
       ],
@@ -234,7 +241,7 @@ export default class MenuBuilder {
                 },
                 {
                   label: 'Toggle &Developer Tools',
-                  accelerator: 'Alt+Ctrl+I',
+                  accelerator: 'F12',
                   click: () => {
                     this.mainWindow.webContents.toggleDevTools();
                   },
@@ -248,6 +255,13 @@ export default class MenuBuilder {
                     this.mainWindow.setFullScreen(
                       !this.mainWindow.isFullScreen()
                     );
+                  },
+                },
+                {
+                  label: 'Toggle &Developer Tools',
+                  accelerator: 'F12',
+                  click: () => {
+                    this.mainWindow.webContents.toggleDevTools();
                   },
                 },
               ],

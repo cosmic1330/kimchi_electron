@@ -1,15 +1,14 @@
 // Disable no-unused-vars, broken for spread args
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
-
-export type Channels = 'ipc-example';
+import { Example, Updater } from './channels';
 
 const electronHandler = {
   ipcRenderer: {
-    sendMessage(channel: Channels, ...args: unknown[]) {
+    sendMessage(channel: Example.IpcExample, ...args: unknown[]) {
       ipcRenderer.send(channel, ...args);
     },
-    on(channel: Channels, func: (...args: unknown[]) => void) {
+    on(channel: Example.IpcExample, func: (...args: unknown[]) => void) {
       const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>
         func(...args);
       ipcRenderer.on(channel, subscription);
@@ -18,11 +17,36 @@ const electronHandler = {
         ipcRenderer.removeListener(channel, subscription);
       };
     },
-    once(channel: Channels, func: (...args: unknown[]) => void) {
+    once(channel: Example.IpcExample, func: (...args: unknown[]) => void) {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
     },
     version() {
-      return ipcRenderer.sendSync('app-version');
+      return ipcRenderer.sendSync(Example.AppVersion);
+    },
+  },
+  updater: {
+    saveUpdate() {
+      ipcRenderer.send(Updater.AutoUpdaterToDownload);
+    },
+    exitApp() {
+      ipcRenderer.send(Updater.ExitApp);
+    },
+    log() {
+      const show = (_event: IpcRendererEvent, info: unknown) =>
+        console.log(info);
+      ipcRenderer.on(Updater.ConsoleLog, show);
+      return () => {
+        ipcRenderer.removeListener(Updater.ConsoleLog, show);
+      };
+    },
+    on(channel: Updater, callback: (...args: unknown[]) => void) {
+      const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>
+        callback(...args);
+      ipcRenderer.on(channel, subscription);
+
+      return () => {
+        ipcRenderer.removeListener(channel, subscription);
+      };
     },
   },
 };
