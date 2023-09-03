@@ -5,6 +5,7 @@ import useUpdater from './hooks/useUpdater';
 
 function Hello() {
   useUpdater();
+
   return (
     <div>
       <div className="Hello">

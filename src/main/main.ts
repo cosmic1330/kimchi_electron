@@ -14,7 +14,7 @@ import { autoUpdater } from 'electron-updater';
 import path from 'path';
 import './ipcMains';
 import MenuBuilder from './menu';
-import { resolveHtmlPath } from './util';
+import { getAssetPath, resolveHtmlPath } from './utils';
 import { Updater } from './channels';
 
 let mainWindow: BrowserWindow | null = null;
@@ -112,14 +112,6 @@ const createWindow = async () => {
   if (isDebug) {
     await installExtensions();
   }
-
-  const RESOURCES_PATH = app.isPackaged
-    ? path.join(process.resourcesPath, 'assets')
-    : path.join(__dirname, '../../assets');
-
-  const getAssetPath = (...paths: string[]): string => {
-    return path.join(RESOURCES_PATH, ...paths);
-  };
 
   mainWindow = new BrowserWindow({
     show: false,

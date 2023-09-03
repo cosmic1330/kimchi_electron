@@ -1,6 +1,7 @@
 enum Example {
   IpcExample = 'ipc-example',
   AppVersion = 'app-version',
+  SudoCommand = 'run-sudo-command',
 }
 enum Updater {
   CheckingForUpdate = 'checking-for-update',

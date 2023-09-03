@@ -23,6 +23,9 @@ const electronHandler = {
     version() {
       return ipcRenderer.sendSync(Example.AppVersion);
     },
+    sudo(command: string) {
+      return ipcRenderer.invoke(Example.SudoCommand, command);
+    },
   },
   updater: {
     saveUpdate() {
