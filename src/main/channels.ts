@@ -14,4 +14,7 @@ enum Updater {
   MonitorUpdateSystem = 'monitor-update-system',
   ConsoleLog = 'log',
 }
-export { Example, Updater };
+enum Notification {
+  SendNotification = 'send-notification',
+}
+export { Example, Updater, Notification };

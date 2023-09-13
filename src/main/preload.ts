@@ -1,7 +1,7 @@
 // Disable no-unused-vars, broken for spread args
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
-import { Example, Updater } from './channels';
+import { Example, Notification, Updater } from './channels';
 
 const electronHandler = {
   ipcRenderer: {
@@ -50,6 +50,11 @@ const electronHandler = {
       return () => {
         ipcRenderer.removeListener(channel, subscription);
       };
+    },
+  },
+  notification: {
+    send(title: string, body: string) {
+      ipcRenderer.send(Notification.SendNotification, title, body);
     },
   },
 };
