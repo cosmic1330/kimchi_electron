@@ -2,6 +2,8 @@ enum Example {
   IpcExample = 'ipc-example',
   AppVersion = 'app-version',
   SudoCommand = 'run-sudo-command',
+  Topt = '2fa-topt',
+  CustomTopt = 'custom-topt',
 }
 enum Updater {
   CheckingForUpdate = 'checking-for-update',
@@ -17,4 +19,10 @@ enum Updater {
 enum Notification {
   SendNotification = 'send-notification',
 }
-export { Example, Updater, Notification };
+enum TOPT {
+  GenerateOtpauth = 'generate-otpauth',
+  Check = 'check-token',
+  Custom = 'custom-topt',
+  generateSecret = 'generate-secret',
+}
+export { Example, Updater, Notification, TOPT };

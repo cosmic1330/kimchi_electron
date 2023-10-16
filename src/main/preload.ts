@@ -1,7 +1,7 @@
 // Disable no-unused-vars, broken for spread args
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
-import { Example, Notification, Updater } from './channels';
+import { Example, Notification, TOPT, Updater } from './channels';
 
 const electronHandler = {
   ipcRenderer: {
@@ -26,6 +26,20 @@ const electronHandler = {
     sudo(command: string) {
       return ipcRenderer.invoke(Example.SudoCommand, command);
     },
+  },
+  topt:{
+    check(args: [secret: string, token: string]) {
+      return ipcRenderer.invoke(TOPT.Check, args);
+    },
+    generateOtpauth(args: [secret: string, user: string, service: string]) {
+      return ipcRenderer.invoke(TOPT.GenerateOtpauth, args);
+    },
+    custom(secret:string) {
+      return ipcRenderer.invoke(TOPT.Custom, secret);
+    },
+    generateSecret() {
+      return ipcRenderer.invoke(TOPT.generateSecret);
+    }
   },
   updater: {
     saveUpdate() {
