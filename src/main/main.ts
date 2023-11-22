@@ -12,11 +12,10 @@ import { BrowserWindow, app, ipcMain, shell } from 'electron';
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
-import { Notification, Updater } from './channels';
+import { Updater } from './channels';
 import './ipcMains';
 import MenuBuilder from './menu';
 import { getAssetPath, resolveHtmlPath } from './utils';
-import sendNotification from './utils/sendNotification';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -108,11 +107,6 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
-// notification
-ipcMain.on(Notification.SendNotification, (event, title, body) => {
-  sendNotification(title, body);
-});
-
 // mainWindow
 const createWindow = async () => {
   if (isDebug) {
@@ -165,7 +159,6 @@ const createWindow = async () => {
 /**
  * Add event listeners...
  */
-
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
   // after all windows have been closed

@@ -25,4 +25,8 @@ enum TOPT {
   Custom = 'custom-topt',
   generateSecret = 'generate-secret',
 }
-export { Example, Updater, Notification, TOPT };
+enum SmartCard {
+  Run = 'run-smart-card',
+  Listen = 'listen-smart-card',
+}
+export { Example, Updater, Notification, TOPT, SmartCard };

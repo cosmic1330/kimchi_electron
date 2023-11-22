@@ -1,7 +1,7 @@
 // Disable no-unused-vars, broken for spread args
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
-import { Example, Notification, TOPT, Updater } from './channels';
+import { Example, Notification, SmartCard, TOPT, Updater } from './channels';
 
 const electronHandler = {
   ipcRenderer: {
@@ -27,19 +27,19 @@ const electronHandler = {
       return ipcRenderer.invoke(Example.SudoCommand, command);
     },
   },
-  topt:{
+  topt: {
     check(args: [secret: string, token: string]) {
       return ipcRenderer.invoke(TOPT.Check, args);
     },
     generateOtpauth(args: [secret: string, user: string, service: string]) {
       return ipcRenderer.invoke(TOPT.GenerateOtpauth, args);
     },
-    custom(secret:string) {
+    custom(secret: string) {
       return ipcRenderer.invoke(TOPT.Custom, secret);
     },
     generateSecret() {
       return ipcRenderer.invoke(TOPT.generateSecret);
-    }
+    },
   },
   updater: {
     saveUpdate() {
@@ -69,6 +69,23 @@ const electronHandler = {
   notification: {
     send(title: string, body: string) {
       ipcRenderer.send(Notification.SendNotification, title, body);
+    },
+  },
+  smartCard: {
+    run() {
+      return ipcRenderer.invoke(SmartCard.Run);
+    },
+    listen(func: (...args: unknown[]) => void) {
+      const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>
+        func(...args);
+      ipcRenderer.on(SmartCard.Listen, subscription);
+      return () => {
+        console.log('here remove listener');
+        ipcRenderer.removeListener(SmartCard.Listen, subscription);
+      };
+    },
+    remove() {
+      ipcRenderer.removeAllListeners(SmartCard.Listen);
     },
   },
 };

@@ -4,12 +4,14 @@ import './App.css';
 import useNotification from './hooks/useNotification';
 import useTopt from './hooks/useTopt';
 import useUpdater from './hooks/useUpdater';
+import useSmartCard from './hooks/useSmartCard';
 
 function Hello() {
   useUpdater();
   const { showNotification } = useNotification();
   const { qrCode, isValidate, customTopt, check, refreshCustomTopt, generateOtpauth } =
     useTopt();
+    const {startUpSmartCard} = useSmartCard();
 
   return (
     <div>
@@ -43,6 +45,10 @@ function Hello() {
           TOPT碼：{customTopt}
           <button onClick={refreshCustomTopt}>刷新</button>
         </p>
+      </div>
+      <div>
+        <h2>Smart Card 讀取</h2>
+        <button onClick={startUpSmartCard}>讀取</button>
       </div>
     </div>
   );

@@ -1,12 +1,14 @@
 import { app, ipcMain } from 'electron';
-import { Example, TOPT } from './channels';
+import { Example, Notification, SmartCard, TOPT } from './channels';
 import { sudoCommand } from './utils';
+import sendNotification from './utils/sendNotification';
 import {
   check,
   generateOtpauth,
   generateSecret,
   generateTOTP,
 } from './utils/topt';
+import getSmartCardInfo from './utils/getSmartCardInfo';
 
 ipcMain.on(Example.IpcExample, async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
@@ -20,6 +22,13 @@ ipcMain.on(Example.AppVersion, (event) => {
 
 ipcMain.handle(Example.SudoCommand, async (event, command) => {
   return sudoCommand(command);
+});
+
+/******************
+ *  Notification  *
+ ******************/
+ipcMain.on(Notification.SendNotification, (event, title, body) => {
+  sendNotification(title, body);
 });
 
 /**********
@@ -42,3 +51,12 @@ ipcMain.handle(TOPT.Custom, async (event, secret) => {
 ipcMain.handle(TOPT.generateSecret, async (event) => {
   return generateSecret();
 });
+
+/****************
+ *  Smart Card  *
+ ****************/
+
+ipcMain.handle(SmartCard.Run, async (event) => {
+  return getSmartCardInfo(event.sender);
+});
+
