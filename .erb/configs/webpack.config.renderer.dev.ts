@@ -193,11 +193,7 @@ const configuration: webpack.Configuration = {
       let args = ['run', 'start:main'];
       if (process.env.MAIN_ARGS) {
         args = args.concat(
-<<<<<<< HEAD
-          ['--', ...process.env.MAIN_ARGS.matchAll(/"[^"]+"|[^\s"]+/g)].flat()
-=======
           ['--', ...process.env.MAIN_ARGS.matchAll(/"[^"]+"|[^\s"]+/g)].flat(),
->>>>>>> 83b826fa9d810e26da7b5f17b4ed543e5f52bb17
         );
       }
       spawn('npm', args, {
