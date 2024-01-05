@@ -32,8 +32,8 @@ if (
 ) {
   console.log(
     chalk.black.bgYellow.bold(
-      'The DLL files are missing. Sit back while we build them for you with "npm run build-dll"'
-    )
+      'The DLL files are missing. Sit back while we build them for you with "npm run build-dll"',
+    ),
   );
   execSync('npm run postinstall');
 }
@@ -193,7 +193,11 @@ const configuration: webpack.Configuration = {
       let args = ['run', 'start:main'];
       if (process.env.MAIN_ARGS) {
         args = args.concat(
+<<<<<<< HEAD
           ['--', ...process.env.MAIN_ARGS.matchAll(/"[^"]+"|[^\s"]+/g)].flat()
+=======
+          ['--', ...process.env.MAIN_ARGS.matchAll(/"[^"]+"|[^\s"]+/g)].flat(),
+>>>>>>> 83b826fa9d810e26da7b5f17b4ed543e5f52bb17
         );
       }
       spawn('npm', args, {
