@@ -18,7 +18,7 @@ const electronHandler = {
       };
     },
     once(channel: Example.IpcExample, func: (...args: unknown[]) => void) {
-      ipcRenderer.once(channel, (_event, ...args) => func(...args));
+      ipcRenderer.once(channel, (_event: any, ...args: any) => func(...args));
     },
     version() {
       return ipcRenderer.sendSync(Example.AppVersion);
