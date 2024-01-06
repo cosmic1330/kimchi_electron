@@ -15,8 +15,7 @@ import path from 'path';
 import { Notification, Updater } from './channels';
 import './ipcMains';
 import MenuBuilder from './menu';
-import { getAssetPath, resolveHtmlPath } from './utils';
-import sendNotification from './utils/sendNotification';
+import { getAssetPath, resolveHtmlPath, sendNotification } from './utils';
 
 let mainWindow: BrowserWindow | null = null;
 

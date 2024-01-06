@@ -13,7 +13,8 @@
     "resolveJsonModule": true,
     "allowJs": true,
     "baseUrl": "./src",
-    "outDir": ".erb/dll"
+    "outDir": ".erb/dll",
+    "types": ["node"]
   },
   "exclude": ["test", "release/build", "release/app/dist", ".erb/dll"]
 }
