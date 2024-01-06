@@ -22,7 +22,7 @@ export default function useNotification() {
   const showNotification = (
     notificationTitle: string,
     notificationBody: string,
-    type: 'electron' | 'browser' = 'browser'
+    type: 'electron' | 'browser' = 'browser',
   ) => {
     if (notificationPermission === 'granted') {
       let notification;
@@ -30,7 +30,7 @@ export default function useNotification() {
         case 'electron':
           window.electron.notification.send(
             notificationTitle,
-            notificationBody
+            notificationBody,
           );
           break;
         case 'browser':

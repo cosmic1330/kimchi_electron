@@ -1,5 +1,6 @@
 import { app, ipcMain } from 'electron';
-import { Example, TOPT } from './channels';
+import si from 'systeminformation';
+import { Example, SystemInformation, TOPT } from './channels';
 import { sudoCommand } from './utils';
 import {
   check,
@@ -22,9 +23,9 @@ ipcMain.handle(Example.SudoCommand, async (event, command) => {
   return sudoCommand(command);
 });
 
-/**********
- *  TOPT  *
- **********/
+/** ********
+ *   TOPT  *
+ ********* */
 ipcMain.handle(TOPT.GenerateOtpauth, async (event, args) => {
   const [secret, user, service] = args;
   return generateOtpauth(secret, user, service);
@@ -39,6 +40,15 @@ ipcMain.handle(TOPT.Custom, async (event, secret) => {
   return generateTOTP(secret);
 });
 
-ipcMain.handle(TOPT.generateSecret, async (event) => {
+ipcMain.handle(TOPT.GenerateSecret, async () => {
   return generateSecret();
+});
+
+/** **********************
+ *  System Information   *
+ *********************** */
+
+ipcMain.handle(SystemInformation.GetUsbDevices, async () => {
+  const data = await si.usb();
+  return data;
 });

@@ -5,28 +5,28 @@ const speakeasy = require('speakeasy');
   Google Authenticator使用secret.ascii
  */
 export const generateSecret = (): string => {
-  var secret = speakeasy.generateSecret();
+  const secret = speakeasy.generateSecret();
   return secret.ascii;
 };
 
 export const generateOtpauth = (
   secret: string,
   user: string,
-  service: string
+  service: string,
 ): string => {
-  var url = speakeasy.otpauthURL({
-    secret: secret,
+  const url = speakeasy.otpauthURL({
+    secret,
     label: `${service}:${user}`,
     algorithm: 'sha256',
   });
   return url;
 };
 export const check = (secret: string, token: string): boolean => {
-  var verified = speakeasy.totp.verify({
-    secret: secret,
+  const verified = speakeasy.totp.verify({
+    secret,
     encoding: 'ascii',
     algorithm: 'sha256',
-    token: token,
+    token,
   });
   return verified;
 };
@@ -35,14 +35,14 @@ export function generateTOTP(
   secret: string,
   algorithm = 'sha256',
   windowSize = 30,
-  digits = 6
+  digits = 6,
 ) {
   const totp = speakeasy.totp({
-    secret: secret,
+    secret,
     encoding: 'ascii',
     window: windowSize,
-    digits: digits,
-    algorithm: algorithm,
+    digits,
+    algorithm,
   });
   return totp;
 }

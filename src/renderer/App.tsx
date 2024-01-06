@@ -2,6 +2,7 @@ import { Route, MemoryRouter, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Hello from './pages/Hello';
 import MuiTheme from './theme';
+import './App.css';
 
 const queryClient = new QueryClient();
 
