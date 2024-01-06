@@ -23,6 +23,10 @@ enum TOPT {
   GenerateOtpauth = 'generate-otpauth',
   Check = 'check-token',
   Custom = 'custom-topt',
-  generateSecret = 'generate-secret',
+  GenerateSecret = 'generate-secret',
 }
-export { Example, Updater, Notification, TOPT };
+
+enum SystemInformation {
+  GetUsbDevices = 'get-usb-devices',
+}
+export { Example, Notification, SystemInformation, TOPT, Updater };

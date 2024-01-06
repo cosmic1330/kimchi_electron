@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
+import useUsb from 'renderer/hooks/useUsb';
 import icon from '../../../../assets/icon.svg';
-import '../../App.css';
 import useNotification from '../../hooks/useNotification';
 import useTopt from '../../hooks/useTopt';
 import useUpdater from '../../hooks/useUpdater';
@@ -16,6 +16,7 @@ export default function Hello() {
     refreshCustomTopt,
     generateOtpauth,
   } = useTopt();
+  useUsb();
 
   return (
     <div>

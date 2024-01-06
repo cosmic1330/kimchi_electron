@@ -14,7 +14,7 @@ export default function useUpdater() {
       // 進度條進度
       console.log(
         'window.electron.updater.Updater.AutoUpdaterProgress',
-        process
+        process,
       );
     });
     window.electron.updater.on(Updater.AutoUpdaterError, (err) => {

@@ -9,8 +9,8 @@ export default function useTopt() {
 
   const generateSecret = async () => {
     try {
-      const secret = await window.electron.topt.generateSecret();
-      setSecret(secret);
+      const secretKey = await window.electron.topt.generateSecret();
+      setSecret(secretKey);
       return 'success';
     } catch (error) {
       return 'error';
@@ -55,5 +55,12 @@ export default function useTopt() {
     generateSecret();
   }, []);
 
-  return { qrCode, isValidate, customTopt, refreshCustomTopt, check, generateOtpauth };
+  return {
+    qrCode,
+    isValidate,
+    customTopt,
+    refreshCustomTopt,
+    check,
+    generateOtpauth,
+  };
 }
