@@ -27,19 +27,19 @@ const electronHandler = {
       return ipcRenderer.invoke(Example.SudoCommand, command);
     },
   },
-  topt:{
+  topt: {
     check(args: [secret: string, token: string]) {
       return ipcRenderer.invoke(TOPT.Check, args);
     },
     generateOtpauth(args: [secret: string, user: string, service: string]) {
       return ipcRenderer.invoke(TOPT.GenerateOtpauth, args);
     },
-    custom(secret:string) {
+    custom(secret: string) {
       return ipcRenderer.invoke(TOPT.Custom, secret);
     },
     generateSecret() {
       return ipcRenderer.invoke(TOPT.generateSecret);
-    }
+    },
   },
   updater: {
     saveUpdate() {
