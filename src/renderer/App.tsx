@@ -11,7 +11,7 @@ function Hello() {
   const { showNotification } = useNotification();
   const { qrCode, isValidate, customTopt, check, refreshCustomTopt, generateOtpauth } =
     useTopt();
-    const {startUpSmartCard} = useSmartCard();
+    const {startUpSmartCard, startUpNFTCard} = useSmartCard();
 
   return (
     <div>
@@ -49,6 +49,7 @@ function Hello() {
       <div>
         <h2>Smart Card 讀取</h2>
         <button onClick={startUpSmartCard}>讀取</button>
+        <button onClick={startUpNFTCard}>讀取nft</button>
       </div>
     </div>
   );

@@ -75,6 +75,9 @@ const electronHandler = {
     run() {
       return ipcRenderer.invoke(SmartCard.Run);
     },
+    runNFT() {
+      return ipcRenderer.invoke(SmartCard.RunNFT);
+    },
     listen(func: (...args: unknown[]) => void) {
       const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>
         func(...args);

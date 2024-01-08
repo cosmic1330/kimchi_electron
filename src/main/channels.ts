@@ -27,6 +27,7 @@ enum TOPT {
 }
 enum SmartCard {
   Run = 'run-smart-card',
+  RunNFT = 'run-nft-smart-card',
   Listen = 'listen-smart-card',
 }
 export { Example, Updater, Notification, TOPT, SmartCard };

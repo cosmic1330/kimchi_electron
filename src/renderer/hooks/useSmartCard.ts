@@ -5,11 +5,15 @@ export default function useSmartCard() {
     window.electron.smartCard.run();
   };
 
+  const startUpNFTCard = () => {
+    window.electron.smartCard.runNFT();
+  };
+
   useEffect(() => {
     window.electron.smartCard.listen(console.log);
     return () => {
       window.electron.smartCard.remove();
     };
   }, []);
-  return { startUpSmartCard };
+  return { startUpSmartCard, startUpNFTCard };
 }

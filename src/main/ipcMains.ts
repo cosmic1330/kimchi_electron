@@ -8,7 +8,7 @@ import {
   generateSecret,
   generateTOTP,
 } from './utils/topt';
-import getSmartCardInfo from './utils/getSmartCardInfo';
+import { getNFTCardInfo, getSmartCardInfo } from './utils/getSmartCardInfo';
 
 ipcMain.on(Example.IpcExample, async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
@@ -60,3 +60,6 @@ ipcMain.handle(SmartCard.Run, async (event) => {
   return getSmartCardInfo(event.sender);
 });
 
+ipcMain.handle(SmartCard.RunNFT, async (event) => {
+  return getNFTCardInfo(event.sender);
+});
