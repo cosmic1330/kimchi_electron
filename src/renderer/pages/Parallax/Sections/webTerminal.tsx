@@ -26,73 +26,73 @@ async function asyncInitSysEnv(term: Terminal, socketURL: string) {
 }
 
 function keyAction(term: Terminal, terminalTitleTemplate: string) {
-  // 定义变量获取整行数据
-  let currentLineData = '';
-  // 历史行输入数据
-  const historyLineData: any[] = [];
-  let last = 0;
-  // 使其能够输入汉字
-  term.onData(async (key) => {
-    // enter键
-    if (key.charCodeAt(0) === 13) {
-      // 将行数据进行添加进去
-      if (currentLineData !== '') {
-        // 将当前行数据传入历史命令数组中存储
-        historyLineData.push(currentLineData);
-        // 定义当前行命令在整个数组中的位置
-        last = historyLineData.length - 1;
+  let currentLine = '';
+  const history: string[] = [];
+  // 1. 當使用者按下 Enter 鍵時，換行並顯示提示符號。
+  term.onKey((e) => {
+    const ev = e.domEvent;
+    if (ev.keyCode === 13) {
+      term.write('\r\n');
+      term.write(`${terminalTitleTemplate}:`);
+      if (currentLine !== '') {
+        history.push(currentLine);
       }
-      // 当输入clear时清空终端内容
-      if (currentLineData === 'clear') {
-        term.clear();
-      }
-
-      // 在这可以进行发起请求将整行数据传入
-
-      // 清空当前行数据
-      currentLineData = '';
-
-      term.write(`\r\n${terminalTitleTemplate}: `);
-    } else if (key.charCodeAt(0) === 127) {
-      // 删除键
-      // 判断当前行数据是否为空
-      if (currentLineData !== '') {
-        // 删除当前行数据
-        currentLineData = currentLineData.substr(0, currentLineData.length - 1);
-        // 删除终端最后一个字符
+      currentLine = '';
+    } else if (
+      ev.keyCode !== 8 &&
+      ev.keyCode !== 9 &&
+      ev.keyCode !== 38 &&
+      ev.keyCode !== 40 &&
+      ev.keyCode !== 37 &&
+      ev.keyCode !== 39
+    ) {
+      currentLine += ev.key;
+      term.write(ev.key);
+    }
+  });
+  // 2. 當使用者按下 Backspace 鍵時，刪除前一個字元，刪除到root@localhost:前時，不再刪除。
+  term.onKey((e) => {
+    const ev = e.domEvent;
+    if (ev.keyCode === 8) {
+      if (currentLine.length > 0) {
+        currentLine = currentLine.slice(0, -1);
         term.write('\b \b');
       }
-    } else if (key === '\u001b[A') {
-      // up键的时候
-      let len = 0;
-      if (historyLineData.length > 0) {
-        len = historyLineData.length + 1;
+    }
+  });
+  // 3. 當使用者按下 Tab 鍵時，自動補齊指令。
+  term.onKey((e) => {
+    const ev = e.domEvent;
+    if (ev.keyCode === 9) {
+      term.write('  ');
+    }
+  });
+  // 4. 當使用者按上下鍵時， 可以瀏覽指令歷史紀錄。
+  term.onKey((e) => {
+    const ev = e.domEvent;
+    if (ev.keyCode === 38) {
+      if (history.length > 0) {
+        term.write('\b \b'.repeat(currentLine.length));
+        currentLine = history.pop() || '';
+        term.write(currentLine);
       }
-
-      if (last < len && last > 0) {
-        const text = historyLineData[last - 1];
-        term.write(text);
-        // 重点，一定要记住存储当前行命令保证下次up或down时不会光标错乱覆盖终端提示符
-        currentLineData = text;
-
-        last--;
+    }
+    if (ev.keyCode === 40) {
+      if (history.length > 0) {
+        term.write('\b \b'.repeat(currentLine.length));
+        currentLine = history.shift() || '';
+        term.write(currentLine);
       }
-    } else if (key === '\u001b[B') {
-      // down键
-      let lent = 0;
-      if (historyLineData.length > 0) {
-        lent = historyLineData.length - 1;
+    }
+  });
+  // 5. 當使用者按左右鍵時
+  // 6. 當輸入clear後按下Enter，清除之前的畫面。
+  term.onKey((e) => {
+    const ev = e.domEvent;
+    if (ev.keyCode === 13) {
+      if (history[history.length - 1] === 'clear') {
+        term.clear();
       }
-      if (last < lent && last > -1) {
-        const text = historyLineData[last + 1];
-        term.write(text);
-        currentLineData = text;
-        last++;
-      }
-    } else {
-      // 啥也不做的时候就直接输入
-      currentLineData += key;
-      term.write(key);
     }
   });
 }
