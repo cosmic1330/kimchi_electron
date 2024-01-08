@@ -3,9 +3,10 @@ import { motion, useInView } from 'framer-motion';
 import { ReactNode, useRef } from 'react';
 import Notification from './Sections/notification';
 import Totp from './Sections/totp';
-import Version from './Sections/version';
-import './styles.css';
 import Usb from './Sections/usb';
+import Version from './Sections/version';
+import WebTerminal from './Sections/webTerminal';
+import './styles.css';
 
 function Image({ children }: { children: ReactNode }) {
   const ref = useRef(null);
@@ -32,7 +33,7 @@ function Image({ children }: { children: ReactNode }) {
 export default function Parallax() {
   return (
     <main id="page">
-      {[<Version />, <Notification />, <Totp />, <Usb />].map(
+      {[<Version />, <Notification />, <Totp />, <Usb />, <WebTerminal />].map(
         (image, index) => (
           // eslint-disable-next-line react/no-array-index-key
           <Image key={index}>{image}</Image>
