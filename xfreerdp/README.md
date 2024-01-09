@@ -16,3 +16,6 @@
     ```bash
     xfreerdp /u:username /p:password /v:ip
     ```
+
+## ubuntu-xrdp image
+"ubuntu-xrdp image" is an Ubuntu desktop container that facilitates testing connections with xfreerdp. You can access the Ubuntu container by connecting to the local IP on port 14389. The username and password for the user account are both "ubuntu."

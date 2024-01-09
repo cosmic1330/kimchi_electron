@@ -6,6 +6,7 @@ import Totp from './Sections/totp';
 import Usb from './Sections/usb';
 import Version from './Sections/version';
 import WebTerminal from './Sections/webTerminal';
+import Xfreerdp from './Sections/xfreerdp';
 import './styles.css';
 
 function Image({ children }: { children: ReactNode }) {
@@ -33,12 +34,17 @@ function Image({ children }: { children: ReactNode }) {
 export default function Parallax() {
   return (
     <main id="page">
-      {[<Version />, <Notification />, <Totp />, <Usb />, <WebTerminal />].map(
-        (image, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <Image key={index}>{image}</Image>
-        ),
-      )}
+      {[
+        <Version />,
+        <Notification />,
+        <Totp />,
+        <Usb />,
+        <WebTerminal />,
+        <Xfreerdp />,
+      ].map((image, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <Image key={index}>{image}</Image>
+      ))}
     </main>
   );
 }

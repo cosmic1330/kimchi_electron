@@ -29,4 +29,8 @@ enum TOPT {
 enum SystemInformation {
   GetUsbDevices = 'get-usb-devices',
 }
-export { Example, Notification, SystemInformation, TOPT, Updater };
+
+enum Xfreerdp {
+  OpenXfreerdp = 'open-xfreerdp',
+}
+export { Example, Notification, SystemInformation, TOPT, Updater, Xfreerdp };
