@@ -13,7 +13,7 @@ import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
 import { Notification, Updater } from './channels';
-import './ipcMains';
+import IpcMainBuilder from './ipcMains';
 import MenuBuilder from './menu';
 import { getAssetPath, resolveHtmlPath, sendNotification } from './utils';
 
@@ -147,6 +147,8 @@ const createWindow = async () => {
     mainWindow = null;
   });
 
+  const ipcMainBuilder = new IpcMainBuilder(mainWindow);
+  ipcMainBuilder.buildIpcMain();
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
 

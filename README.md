@@ -43,12 +43,14 @@ Start the app in the `dev` environment:
 npm start
 ```
 
-## Xfreerdp
+## Xfreerdp and Ubuntu 20.04 desktop xrdp
 In Linux you can use xfreerdp to connect to a windows machine.  This is a good way to test the app.
 
 ```bash
 cd xfreerdp
 docker-compose up -d
+# test
+docker exec -it xfreerdp  
 ```
 
 

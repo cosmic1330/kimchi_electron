@@ -10,3 +10,12 @@ services:
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
     command: tail -f /dev/null
+
+  uxrdp:
+    image: danielguerra/ubuntu-xrdp:20.04
+    container_name: uxrdp
+    hostname: terminalserver
+    shm_size: 4g
+    ports:
+      - "14389:3389"
+      - "14322:22"

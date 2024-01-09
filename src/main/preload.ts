@@ -7,6 +7,7 @@ import {
   SystemInformation,
   TOPT,
   Updater,
+  Xfreerdp,
 } from './channels';
 
 const electronHandler = {
@@ -31,6 +32,17 @@ const electronHandler = {
     },
     sudo(command: string) {
       return ipcRenderer.invoke(Example.SudoCommand, command);
+    },
+  },
+  xfreerdp: {
+    open(user: string, password: string, vm: string, props: string[]) {
+      return ipcRenderer.invoke(
+        Xfreerdp.OpenXfreerdp,
+        user,
+        password,
+        vm,
+        props,
+      );
     },
   },
   systeminformation: {

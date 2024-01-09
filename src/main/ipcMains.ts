@@ -1,7 +1,9 @@
-import { app, ipcMain } from 'electron';
+import { BrowserWindow, app, ipcMain } from 'electron';
+import path from 'path';
 import si from 'systeminformation';
-import { Example, SystemInformation, TOPT } from './channels';
-import { sudoCommand } from './utils';
+import { Example, SystemInformation, TOPT, Xfreerdp } from './channels';
+import { executePlateformFunction, sudoCommand } from './utils';
+import asyncSpawn from './utils/asyncSpawn';
 import {
   check,
   generateOtpauth,
@@ -9,46 +11,87 @@ import {
   generateTOTP,
 } from './utils/topt';
 
-ipcMain.on(Example.IpcExample, async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply(Example.IpcExample, msgTemplate('pong'));
-});
+export default class IpcMainBuilder {
+  mainWindow: BrowserWindow;
 
-ipcMain.on(Example.AppVersion, (event) => {
-  event.returnValue = app.getVersion();
-});
+  constructor(mainWindow: BrowserWindow) {
+    this.mainWindow = mainWindow;
+  }
 
-ipcMain.handle(Example.SudoCommand, async (event, command) => {
-  return sudoCommand(command);
-});
+  buildIpcMain() {
+    /** **********
+     *  EXAMPLE  *
+     *********** */
+    ipcMain.on(Example.IpcExample, async (event, arg) => {
+      const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
+      console.log(msgTemplate(arg));
+      event.reply(Example.IpcExample, msgTemplate('pong'));
+    });
+    ipcMain.on(Example.AppVersion, (event) => {
+      event.returnValue = app.getVersion();
+    });
 
-/** ********
- *   TOPT  *
- ********* */
-ipcMain.handle(TOPT.GenerateOtpauth, async (event, args) => {
-  const [secret, user, service] = args;
-  return generateOtpauth(secret, user, service);
-});
+    ipcMain.handle(Example.SudoCommand, async (event, command) => {
+      return sudoCommand(command);
+    });
 
-ipcMain.handle(TOPT.Check, async (event, args) => {
-  const [secret, token] = args;
-  return check(secret, token);
-});
+    /** ********
+     *   TOPT  *
+     ********* */
+    ipcMain.handle(TOPT.GenerateOtpauth, async (event, args) => {
+      const [secret, user, service] = args;
+      return generateOtpauth(secret, user, service);
+    });
+    ipcMain.handle(TOPT.Check, async (event, args) => {
+      const [secret, token] = args;
+      return check(secret, token);
+    });
+    ipcMain.handle(TOPT.Custom, async (event, secret) => {
+      return generateTOTP(secret);
+    });
+    ipcMain.handle(TOPT.GenerateSecret, async () => {
+      return generateSecret();
+    });
 
-ipcMain.handle(TOPT.Custom, async (event, secret) => {
-  return generateTOTP(secret);
-});
+    /** **********************
+     *  System Information   *
+     *********************** */
+    ipcMain.handle(SystemInformation.GetUsbDevices, async () => {
+      const data = await si.usb();
+      return data;
+    });
 
-ipcMain.handle(TOPT.GenerateSecret, async () => {
-  return generateSecret();
-});
+    /** ***********
+     *  Xfreerdp  *
+     ************ */
+    ipcMain.handle(
+      Xfreerdp.OpenXfreerdp,
+      async (
+        _,
+        user: string,
+        password: string,
+        vm: string,
+        props: string[],
+      ) => {
+        const config = ['-u', user, '-p', password, '-v', vm, ...props];
+        const linuxPath = app.isPackaged
+          ? path.join(
+              process.resourcesPath,
+              'assets/terminal/docker-freerdp.sh',
+            )
+          : path.join(__dirname, '../../assets/terminal/docker-freerdp.sh');
 
-/** **********************
- *  System Information   *
- *********************** */
+        const func = {
+          linux: () => asyncSpawn(linuxPath, config),
+          darwin: () => asyncSpawn(linuxPath, config),
+        };
+        const result = executePlateformFunction(func);
+        return result;
+      },
+    );
 
-ipcMain.handle(SystemInformation.GetUsbDevices, async () => {
-  const data = await si.usb();
-  return data;
-});
+    this.mainWindow.webContents.on('did-finish-load', () => {
+      console.log('IpcMainBuilder load finished');
+    });
+  }
+}

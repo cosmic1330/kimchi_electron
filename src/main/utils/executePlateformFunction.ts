@@ -6,7 +6,7 @@ type PlateformFunctions = {
 
 export default function executePlateformFunction(
   platformFunctions: PlateformFunctions,
-  props: unknown,
+  props?: unknown,
 ) {
   const runFunction = platformFunctions[platform] || null;
 
