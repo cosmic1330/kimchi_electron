@@ -1,7 +1,10 @@
 import { Updater } from 'main/channels';
-import { useEffect } from 'react';
+import { UpdaterProcessType } from 'main/types';
+import { useEffect, useState } from 'react';
 
 export default function useUpdater() {
+  const [process, setProcess] = useState(0);
+
   useEffect(() => {
     window.electron.updater.log();
     window.electron.updater.on(Updater.AutoUpdaterCanUpdate, (info: any) => {
@@ -10,12 +13,14 @@ export default function useUpdater() {
         window.electron.updater.saveUpdate();
       }
     });
-    window.electron.updater.on(Updater.AutoUpdaterProgress, (process) => {
+    window.electron.updater.on(Updater.AutoUpdaterProgress, (processObj) => {
       // 進度條進度
       console.log(
         'window.electron.updater.Updater.AutoUpdaterProgress',
-        process,
+        processObj,
       );
+      const { percent } = processObj as UpdaterProcessType;
+      setProcess(percent);
     });
     window.electron.updater.on(Updater.AutoUpdaterError, (err) => {
       alert('更新失敗');
@@ -29,5 +34,5 @@ export default function useUpdater() {
       }
     });
   }, []);
-  return undefined;
+  return { process };
 }

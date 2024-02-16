@@ -3,12 +3,10 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import Parallax from './pages/Parallax';
 import MuiTheme from './theme';
 import './App.css';
-import useUpdater from './hooks/useUpdater';
 
 const queryClient = new QueryClient();
 
 export default function App() {
-  useUpdater();
   return (
     <QueryClientProvider client={queryClient}>
       <MuiTheme>
