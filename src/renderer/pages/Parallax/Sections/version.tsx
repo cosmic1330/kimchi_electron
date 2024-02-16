@@ -1,7 +1,10 @@
-import { Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
+import useUpdater from 'renderer/hooks/useUpdater';
 import icon from '../../../../../assets/icon.svg';
 
 export default function Version() {
+  const { process } = useUpdater();
+  const onClick = () => window.electron.updater.restart();
   return (
     <Stack justifyContent="center" alignItems="center">
       <div>
@@ -11,6 +14,8 @@ export default function Version() {
       <Typography variant="h5">
         {window.electron.ipcRenderer.version()}
       </Typography>
+      <Button onClick={onClick}>Recheck New Version</Button>
+      <Typography variant="h2">Process: {process}</Typography>
     </Stack>
   );
 }

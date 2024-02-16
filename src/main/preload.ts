@@ -65,6 +65,9 @@ const electronHandler = {
     },
   },
   updater: {
+    restart() {
+      ipcRenderer.send(Updater.MonitorUpdateSystem);
+    },
     saveUpdate() {
       ipcRenderer.send(Updater.AutoUpdaterToDownload);
     },
