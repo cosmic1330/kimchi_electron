@@ -1,3 +1,4 @@
+// https://www.gushiciku.cn/pl/g63r/zh-tw (未完成)
 /* eslint-disable no-plusplus */
 import { Stack, Typography } from '@mui/material';
 import { useEffect } from 'react';
@@ -121,7 +122,7 @@ function initTerminal() {
 export default function WebTerminal() {
   useEffect(() => {
     const term = initTerminal();
-    asyncInitSysEnv(term, 'ws://127.0.0.1:4000/socket/');
+    // asyncInitSysEnv(term, 'ws://127.0.0.1:4000/socket/');
 
     return () => {
       term.dispose();
