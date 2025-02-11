@@ -1,4 +1,4 @@
-import { app, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import { Example, TOPT } from './channels';
 import { sudoCommand } from './utils';
 import {
@@ -7,6 +7,7 @@ import {
   generateSecret,
   generateTOTP,
 } from './utils/topt';
+import { creatTransparentChilds, transparentWindow } from './transparent_window/childs';
 
 ipcMain.on(Example.IpcExample, async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
@@ -42,3 +43,18 @@ ipcMain.handle(TOPT.Custom, async (event, secret) => {
 ipcMain.handle(TOPT.generateSecret, async (event) => {
   return generateSecret();
 });
+
+
+/***********************
+ *  Transparent Window  *
+ ***********************/
+ipcMain.on('open-transparent-window', async () => {
+  if (
+    transparentWindow.size === 0
+  )
+  creatTransparentChilds();
+});
+ipcMain.on('set-ignore-mouse-events', (event, ignore, options) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  win?.setIgnoreMouseEvents(ignore, options)
+})

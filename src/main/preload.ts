@@ -71,6 +71,20 @@ const electronHandler = {
       ipcRenderer.send(Notification.SendNotification, title, body);
     },
   },
+  transparentWindow:{
+    open(){
+      ipcRenderer.send('open-transparent-window');
+    },
+    close(){
+      ipcRenderer.send('close-transparent-window');
+    },
+    disable(){
+      ipcRenderer.send("disable-ignore-mouse-events");
+    },
+    enable(){
+      ipcRenderer.send("enable-ignore-mouse-events");
+    }
+  }
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);
