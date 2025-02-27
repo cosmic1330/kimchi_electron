@@ -13,7 +13,7 @@ export default function Transparent() {
         onMouseLeave={() => {
             window.electron.transparentWindow.enable();
 
-        }}>關閉</button>
+        }}>關閉1</button>
         </div>
     );
 }
