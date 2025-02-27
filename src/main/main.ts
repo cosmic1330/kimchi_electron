@@ -53,7 +53,7 @@ class AppUpdater {
         .downloadUpdate()
         .then((r) => send(Updater.ConsoleLog, { title: '发起更新成功', r }))
         .catch((err) =>
-          send(Updater.ConsoleLog, { title: '发起更新失败', err })
+          send(Updater.ConsoleLog, { title: '发起更新失败', err }),
         );
     });
     // 更新错误
@@ -103,7 +103,7 @@ const installExtensions = async () => {
   return installer
     .default(
       extensions.map((name) => installer[name]),
-      forceDownload
+      forceDownload,
     )
     .catch(console.log);
 };

@@ -27,19 +27,19 @@ const electronHandler = {
       return ipcRenderer.invoke(Example.SudoCommand, command);
     },
   },
-  topt:{
+  topt: {
     check(args: [secret: string, token: string]) {
       return ipcRenderer.invoke(TOPT.Check, args);
     },
     generateOtpauth(args: [secret: string, user: string, service: string]) {
       return ipcRenderer.invoke(TOPT.GenerateOtpauth, args);
     },
-    custom(secret:string) {
+    custom(secret: string) {
       return ipcRenderer.invoke(TOPT.Custom, secret);
     },
     generateSecret() {
       return ipcRenderer.invoke(TOPT.generateSecret);
-    }
+    },
   },
   updater: {
     saveUpdate() {
@@ -71,20 +71,20 @@ const electronHandler = {
       ipcRenderer.send(Notification.SendNotification, title, body);
     },
   },
-  transparentWindow:{
-    open(){
+  transparentWindow: {
+    open() {
       ipcRenderer.send('open-transparent-window');
     },
-    close(){
+    close() {
       ipcRenderer.send('close-transparent-window');
     },
-    disable(){
-      ipcRenderer.send("disable-ignore-mouse-events");
+    disable() {
+      ipcRenderer.send('disable-ignore-mouse-events');
     },
-    enable(){
-      ipcRenderer.send("enable-ignore-mouse-events");
-    }
-  }
+    enable() {
+      ipcRenderer.send('enable-ignore-mouse-events');
+    },
+  },
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);

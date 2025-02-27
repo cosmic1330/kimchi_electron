@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import path from 'path';
 import { resolveHtmlPath } from '../utils';
-/* 
+/*
  **************************
  *** Transparent Window ***
  **************************
@@ -13,8 +13,8 @@ export function creatTransparentChilds() {
   const { height, width } = screen.getPrimaryDisplay().workAreaSize;
   const transparent = new BrowserWindow({
     title: 'transparent',
-    width,
-    height,
+    // width,
+    // height,
     resizable: false,
     autoHideMenuBar: true,
     show: false,
@@ -25,8 +25,8 @@ export function creatTransparentChilds() {
     alwaysOnTop: true,
     webPreferences: {
       preload: app.isPackaged
-          ? path.join(__dirname, 'preload.js')
-          : path.join(__dirname, '../../../.erb/dll/preload.js'),
+        ? path.join(__dirname, 'preload.js')
+        : path.join(__dirname, '../../.erb/dll/preload.js'),
     },
   });
 
@@ -37,17 +37,19 @@ export function creatTransparentChilds() {
       (values.next().value as any).close();
     }
   });
-  ipcMain.on("disable-ignore-mouse-events", () => {
+  ipcMain.on('disable-ignore-mouse-events', () => {
     if (transparentWindow.size > 0) {
       const values = transparentWindow.values();
       (values.next().value as any).setIgnoreMouseEvents(false);
     }
   });
-  
-  ipcMain.on("enable-ignore-mouse-events", () => {
+
+  ipcMain.on('enable-ignore-mouse-events', () => {
     if (transparentWindow.size > 0) {
       const values = transparentWindow.values();
-      (values.next().value as any).setIgnoreMouseEvents(true, { forward: true });
+      (values.next().value as any).setIgnoreMouseEvents(true, {
+        forward: true,
+      });
     }
   });
 
